@@ -5,6 +5,7 @@ import com.devsuperior.demo.entities.City;
 public class CityDTO {
 	
 	private Long id;
+
 	private String name;
 	
 	public CityDTO() {
