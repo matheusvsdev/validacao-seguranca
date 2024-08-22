@@ -5,12 +5,16 @@ import com.devsuperior.demo.entities.City;
 import com.devsuperior.demo.repository.CityRepository;
 import com.devsuperior.demo.services.exceptions.DatabaseException;
 import com.devsuperior.demo.services.exceptions.ResourceNotFound;
+import com.devsuperior.demo.services.exceptions.UnprocessableEntity;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 import java.util.List;
@@ -22,6 +26,9 @@ public class CityService {
     @Autowired
     private CityRepository repository;
 
+    @Autowired
+    private AuthService authService;
+
     @Transactional(readOnly = true)
     public List<CityDTO> findAllSortedByName() {
         List<City> list = repository.findAll(Sort.by("name"));
@@ -31,12 +38,9 @@ public class CityService {
 
     @Transactional
     public CityDTO insert(CityDTO cityDTO) {
-        if (cityDTO.getName() == null || cityDTO.getName().trim().isEmpty()) {
-            throw new ResourceNotFound("campo requerido");
-        }
-
         City city = new City();
         city.setName(cityDTO.getName());
+
         city = repository.save(city);
 
         return new CityDTO(city);

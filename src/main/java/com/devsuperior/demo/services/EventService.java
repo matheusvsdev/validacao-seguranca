@@ -29,19 +29,7 @@ public class EventService {
     @Transactional
     public EventDTO createEvent(EventDTO eventDTO) {
 
-        if (eventDTO.getCityId() == null) {
-            throw new ResourceNotFound("Campo cidade requerido");
-        }
-
         authService.validateSelfOrAdmin(eventDTO.getCityId());
-
-        if (eventDTO.getName() == null || eventDTO.getName().trim().isEmpty()) {
-            throw new ResourceNotFound("Campo nome requerido");
-        }
-
-        if (eventDTO.getDate() == null || eventDTO.getDate().isBefore(LocalDate.now())) {
-            throw new ResourceNotFound("Data do evento não pode ser no passado");
-        }
 
         City city = cityRepository.findById(eventDTO.getCityId())
                 .orElseThrow(() -> new ResourceNotFound("City not found"));

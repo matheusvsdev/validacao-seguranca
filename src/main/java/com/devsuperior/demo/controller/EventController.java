@@ -28,7 +28,7 @@ public class EventController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
     @PostMapping
-    public ResponseEntity<EventDTO> addProduct(@Valid @RequestBody EventDTO eventDTO) {
+    public ResponseEntity<EventDTO> insertEvent(@Valid @RequestBody EventDTO eventDTO) {
         eventDTO = service.createEvent(eventDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(eventDTO.getId()).toUri();
         return ResponseEntity.created(uri).body(eventDTO);
